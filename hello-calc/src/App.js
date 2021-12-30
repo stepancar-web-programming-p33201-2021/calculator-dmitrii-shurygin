@@ -1,64 +1,60 @@
-import {useState} from 'react';
+import { useState } from 'react'
 
-function App() {
-  const [calc, setCalc] = useState("");
-  const [result, setResult] = useState("");
+function App () {
+  const [calc, setCalc] = useState('')
 
-  const ops = ['/', '*', '+', '-', '.', '**'];
+  const ops = ['/', '*', '+', '-', '.', '**']
 
   const updateCalc = value => {
-    if(
-      ops.includes(value) && calc === '' || ops.includes(value) && ops.includes(calc.slice(-1))
-    ) {
-      return;
+    if ((ops.includes(value) && calc === '') || (ops.includes(value) && ops.includes(calc.slice(-1)))) {
+      return
     }
 
-    setCalc(calc+value);
+    setCalc(calc + value)
+  }
 
-    if (!ops.includes(value)) {
-      value=value+calc;
-      setResult(value.toString())
+  const updateCalcKeyboard = value => {
+    if (!isNaN(value) || ops.includes(value)) {
+      updateCalc(value)
     }
   }
 
   const calculate = () => {
-    if (calc == '') {
-      return;
+    if (calc === '') {
+      return
     }
 
-    setCalc(eval(calc).toString());
+    setCalc(eval(calc).toString())
   }
 
-  const deleteAll = () => { 
-    if (calc == '') {
-      return;
+  const deleteAll = () => {
+    if (calc === '') {
+      return
     }
 
-    const value = calc.slice(0, -calc.length);
-    setCalc(value);
-  } 
+    const value = calc.slice(0, -calc.length)
+    setCalc(value)
+  }
 
   const createDigits = () => {
-    const digits = [];
+    const digits = []
 
-    for (let i = 1; i<10; i++){
+    for (let i = 1; i < 10; i++) {
       digits.push(
-        <button 
-          onClick={() => updateCalc(i.toString())} 
+        <button
+          onClick={() => updateCalc(i.toString())}
           key={i}>
           {i}
         </button>
       )
     }
-    return digits;
+    return digits
   }
 
   return (
     <div className="App">
       <div className="calculator">
-        <div tabIndex="-1" className="display">
-          { calc || "0" }
-        </div>
+        <input tabIndex="-1" className="display" value={calc || '0'} onKeyDown={(e) => updateCalcKeyboard(e.key)}/>
         <div className="operators">
           <button onClick={() => updateCalc('/')}>/</button>
           <button onClick={() => updateCalc('*')}>*</button>
@@ -68,14 +64,14 @@ function App() {
           <button onClick={deleteAll}>Clear</button>
         </div>
         <div className="digits">
-          {createDigits()}
+          { createDigits() }
           <button onClick={() => updateCalc('0')}>0</button>
           <button onClick={() => updateCalc('.')}>.</button>
           <button onClick={calculate}>=</button>
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
